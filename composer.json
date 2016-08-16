@@ -1,0 +1,12 @@
+{
+  "name": "shermanwebdesign/order",
+  "description": "Order info and Item listing storage model",
+  "minimum-stability": "dev",
+  "license": "wtfpl",
+  "authors": [
+    {
+      "name": "Ken Sherman",
+      "email": "ken@shermanwebdesign.com"
+    }
+  ]
+}
