@@ -161,7 +161,7 @@ class Order
 
     }
 
-    public function create_mysql_storageTable($pdoConnection,$tablename='orders'){
+    public static function create_mysql_storageTable($pdoConnection,$tablename='orders'){
 
         if (!is_string($tablename) || strpos($tablename, ' ') !== false ){
             throw new \Exception('invalid table name for order table creationg');

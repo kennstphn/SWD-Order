@@ -99,4 +99,20 @@ class Item
         return false;
     }
 
+    public static function create_mysql_storage_table($pdoConnection, $tablename = 'items'){
+        $sql = 'CREATE TABLE `'.$tablename.'` (
+  `item_id` int(11) DEFAULT NULL,
+  `order_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `serial_number` varchar(128) NOT NULL DEFAULT \'\',
+  `cost` decimal(6,2) DEFAULT NULL,
+  `estimate` decimal(6,2) DEFAULT NULL,
+  `comments` text,
+  PRIMARY KEY (`item_id`)
+) DEFAULT CHARSET=utf8;';
+
+        $query = $pdoConnection->prepare($sql);
+        return $query->execute();
+
+    }
+
 }
