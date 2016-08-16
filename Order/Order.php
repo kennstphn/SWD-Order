@@ -170,7 +170,7 @@ class Order
         $sql = 'CREATE TABLE `'.$tablename.'` (
           `orders_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `order_date` datetime NOT NULL,
-          `status` varchar(64) DEFAULT \'pending\',
+          `order_status` varchar(64) DEFAULT \'pending\',
           `company` varchar(128) NOT NULL,
           `firstname` varchar(64) NOT NULL,
           `lastname` varchar(64) NOT NULL,
