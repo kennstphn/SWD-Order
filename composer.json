@@ -8,5 +8,10 @@
       "name": "Ken Sherman",
       "email": "ken@shermanwebdesign.com"
     }
-  ]
+  ],
+  "autoload": {
+  "psr-4": {
+    "SWD\\": "Order/"
+  }
+}
 }
