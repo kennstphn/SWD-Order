@@ -101,8 +101,8 @@ class Item
 
     public static function create_mysql_storage_table($pdoConnection, $tablename = 'items'){
         $sql = 'CREATE TABLE `'.$tablename.'` (
-  `item_id` int(11) DEFAULT NULL,
-  `order_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) DEFAULT NULL AUTO_INCREMENT,
+  `order_id` int(11) unsigned NOT NULL,
   `serial_number` varchar(128) NOT NULL DEFAULT \'\',
   `cost` decimal(6,2) DEFAULT NULL,
   `estimate` decimal(6,2) DEFAULT NULL,
