@@ -110,7 +110,7 @@ class Order
         $sql = 'INSERT INTO '.$tablename.' 
                 (order_date,order_status,company,firstname,lastname,phone,email,address1,address2,city,state,zip,country) 
                 VALUES 
-                (:order_date,:orderstatus,:company,:firstname,:lastname,:phone,:email,:address1,:address2,:city,:state,:zip,:country)';
+                (:orderdate,:orderstatus,:company,:firstname,:lastname,:phone,:email,:address1,:address2,:city,:state,:zip,:country)';
 
         $query = $pdoConnection->prepare($sql);
         $success = $query->execute(array(
