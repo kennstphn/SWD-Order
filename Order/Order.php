@@ -64,7 +64,7 @@ class Order
 
         $sql = 'UPDATE '.$tablename.' 
                 SET orderdate = :orderdate,
-                    orderstatus = :orderstatus,
+                    order_status = :orderstatus,
                     company = :company,
                     firstname = :firstname,
                     lastname = :lastname,
@@ -110,7 +110,7 @@ class Order
         $sql = 'INSERT INTO '.$tablename.' 
                 (order_date,order_status,company,firstname,lastname,phone,email,address1,address2,city,state,zip,country) 
                 VALUES 
-                (:order_date,:order_status,:company,:firstname,:lastname,:phone,:email,:address1,:address2,:city,:state,:zip,:country)';
+                (:order_date,:orderstatus,:company,:firstname,:lastname,:phone,:email,:address1,:address2,:city,:state,:zip,:country)';
 
         $query = $pdoConnection->prepare($sql);
         $success = $query->execute(array(
