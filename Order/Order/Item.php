@@ -7,6 +7,7 @@ class Item
 {
     public $itemId;
     public $orderId;
+    public $itemDescription;
     public $serialNumber;
     public $estimate;
     public $cost;
@@ -21,13 +22,14 @@ class Item
             throw new \Exception('Invalid table name for saving order item');
         }
 
-        $sql = 'INSERT INTO '.$tablename.' (order_id,serial_number,estimate,cost,comments) 
-          VALUES(:orderId,:serialNumber,:estimate,:cost,:comments)';
+        $sql = 'INSERT INTO '.$tablename.' (order_id,item_description,serial_number,estimate,cost,comments) 
+          VALUES(:orderId,:itemDescription,:serialNumber,:estimate,:cost,:comments)';
 
         $query = $pdoConnection->prepare($sql);
 
         $success = $query->execute(array(
             ':orderId'=>$this->orderId,
+            ':itemDescription'=>$this->itemDescription,
             'serialNumber'=>$this->serialNumber,
             ':estimate'=>$this->estimate,
             ':cost'=>$this->cost,
@@ -48,6 +50,7 @@ class Item
 
         $sql = 'UPDATE '.$tableName.' SET 
             order_id = :orderId,
+            item_description = :itemDescription
             serial_number = :serialNumber,
             estimate = :estimate,
             cost = :cost,
@@ -59,6 +62,7 @@ class Item
 
         $success = $query->execute(array(
             ':orderId'=>$this->orderId,
+            ':itemDescription'=>$this->itemDescription,
             ':serialNumber'=>$this->serialNumber,
             ':estimate'=>$this->estimate,
             ':cost'=>$this->cost,
@@ -76,10 +80,6 @@ class Item
         if(
             !is_string($this->comments)
             || !is_string($this->serialNumber)
-            || (!is_string($this->cost) && !is_float($this->cost) && !is_int($this->cost))
-            || (!is_string($this->estimate) && !is_float($this->estimate) && !is_int($this->estimate))
-            || !is_int($this->orderId)
-
         ){
             return false;
         }
@@ -90,6 +90,7 @@ class Item
     public function classify_object($dbRecord){
         $this->itemId = $dbRecord->itemId;
         $this->orderId = $dbRecord->orderId;
+        $this->itemDescription = $dbRecord->itemDescription;
         $this->serialNumber = $dbRecord->serialNumber;
         $this->estimate = $dbRecord->estimate;
         $this->cost = $dbRecord->cost;
@@ -102,8 +103,9 @@ class Item
     public static function create_mysql_storage_table($pdoConnection, $tablename = 'items'){
         $sql = 'CREATE TABLE `'.$tablename.'` (
   `item_id` int(11) DEFAULT NULL AUTO_INCREMENT,
+  `item_description` varchar(128) DEFAULT NULL,
   `order_id` int(11) unsigned NOT NULL,
-  `serial_number` varchar(128) NOT NULL DEFAULT \'\',
+  `serial_number` varchar(128) DEFAULT NULL,
   `cost` decimal(6,2) DEFAULT NULL,
   `estimate` decimal(6,2) DEFAULT NULL,
   `comments` text,
