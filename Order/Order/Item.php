@@ -30,7 +30,7 @@ class Item
         $success = $query->execute(array(
             ':orderId'=>$this->orderId,
             ':itemDescription'=>$this->itemDescription,
-            'serialNumber'=>$this->serialNumber,
+            ':serialNumber'=>$this->serialNumber,
             ':estimate'=>$this->estimate,
             ':cost'=>$this->cost,
             ':comments'=>$this->comments
