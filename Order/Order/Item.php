@@ -50,7 +50,7 @@ class Item
 
         $sql = 'UPDATE '.$tableName.' SET 
             order_id = :orderId,
-            item_description = :itemDescription
+            item_description = :itemDescription,
             serial_number = :serialNumber,
             estimate = :estimate,
             cost = :cost,
@@ -102,7 +102,7 @@ class Item
 
     public static function create_mysql_storage_table($pdoConnection, $tablename = 'items'){
         $sql = 'CREATE TABLE `'.$tablename.'` (
-  `item_id` int(11) DEFAULT NULL AUTO_INCREMENT,
+  `item_id` int(11) NOT NULL AUTO_INCREMENT,
   `item_description` varchar(128) DEFAULT NULL,
   `order_id` int(11) unsigned NOT NULL,
   `serial_number` varchar(128) DEFAULT NULL,

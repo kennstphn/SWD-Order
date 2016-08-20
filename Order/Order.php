@@ -148,10 +148,20 @@ class Order
 
         if ($result === false){ return false;}
 
-        foreach ($result as $index => $value){
-            $this->$index = $value;
-        }
-
+        $this->address1 = $result['address1'];
+        $this->address2 = $result['address2'];
+        $this->city = $result['city'];
+        $this->state = $result['state'];
+        $this->zip = $result['zip'];
+        $this->country = $result['country'];
+        $this->firstname = $result['firstname'];
+        $this->lastname  = $result['lastname'];
+        $this->phone = $result['phone'];
+        $this->email = $result['email'];
+        $this->company = $result['company'];
+        $this->orderstatus = $result['order_status'];
+        $this->orderdate = $result['order_date'];
+        
         if (! is_a($this->orderdate, 'DateTime')){
             $this->orderdate = new \DateTime($this->orderdate);
         }
