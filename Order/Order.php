@@ -59,7 +59,7 @@ class Order
     }
 
     public function update_to_mysql_storageTable($pdoConnection ,$tablename='orders'){
-        
+
         if ($this->validate_fields() === false){ throw new \Exception('unable to update order. Invalid fields');}
 
         $sql = 'UPDATE '.$tablename.' 
@@ -93,9 +93,9 @@ class Order
             ':zip'=>$this->zip,
             ':country'=>$this->country,
             ':order_id'=>$this->order_id
-            
+
         ));
-        
+
         return $success;
     }
 
@@ -161,7 +161,8 @@ class Order
         $this->company = $result['company'];
         $this->orderstatus = $result['order_status'];
         $this->orderdate = $result['order_date'];
-        
+        $this->order_id = $result['order_id'];
+
         if (! is_a($this->orderdate, 'DateTime')){
             $this->orderdate = new \DateTime($this->orderdate);
         }
@@ -178,7 +179,7 @@ class Order
         }
 
         $sql = 'CREATE TABLE `'.$tablename.'` (
-          `orders_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `order_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `order_date` datetime NOT NULL,
           `order_status` varchar(64) DEFAULT \'pending\',
           `company` varchar(128) NOT NULL,
@@ -192,7 +193,7 @@ class Order
           `state` varchar(64) NULL DEFAULT NULL,
           `zip` varchar(64) NOT NULL,
           `country` varchar(64) NOT NULL,
-          PRIMARY KEY (`orders_id`)
+          PRIMARY KEY (`order_id`)
           ) DEFAULT CHARSET=utf8;';
 
         $query = $pdoConnection->prepare($sql);
@@ -203,25 +204,25 @@ class Order
     public function load_itemList($pdoConnection,$tableName='items'){
         
         $sql = 'SELECT * FROM '.$tableName.' WHERE order_id = :orderId';
-        
+
         $query = $pdoConnection->prepare($sql);
-        
+
         $success = $query->execute(array(':orderId'=>$this->order_id));
-        
+
         if (! $success){ throw new \Exception('unable to find any orders for that id number');}
-        
+
         $resultList = $query->fetchAll();
-        
+
         foreach ($resultList as $result){
-            
+
             $item = new Item();
             if ($item->classify_object($result)){
                 array_push($this->itemList, $item);
-            }            
+            }
         }
-        
+
     }
-    
+
     public function get_current_estimate(){
         $runningTotal = 0;
         foreach ($this->itemList as $item){
@@ -230,15 +231,15 @@ class Order
 
         return $runningTotal;
     }
-    
+
     public function get_final_total(){
         $runningTotal = 0;
         foreach ($this->itemList as $item){
-            
+
             $runningTotal = $runningTotal+$item->cost;
-            
+
         }
-        
+
         return $runningTotal;
 
     }
