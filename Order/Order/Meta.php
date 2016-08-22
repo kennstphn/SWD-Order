@@ -23,7 +23,7 @@ class Meta
             `order_id` INT (11) NOT NULL,
             `meta_key` varchar (128) NOT NULL,
             `meta_value` varchar (128) DEFAULT NULL,
-            `date_updated` datetime ON UPDATE CURRENT_TIMESTAMP,
+            `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`meta_id`)
         ) AUTO_INCREMENT = 0 DEFAULT CHARSET=utf8;';
 
