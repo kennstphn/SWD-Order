@@ -217,7 +217,7 @@ class Order
 
             $item = new Item();
             if ($item->classify_object($result)){
-                array_push($this->itemList, $item);
+                $this->itemList[$item->itemId] = $item;
             }
         }
 
