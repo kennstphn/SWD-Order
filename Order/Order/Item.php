@@ -12,6 +12,7 @@ class Item
     public $estimate;
     public $cost;
     public $comments;
+    public $itemStatus;
 
 
     public function add_to_mysql_storageTable($pdoConnection, $tablename = 'items'){
@@ -22,8 +23,8 @@ class Item
             throw new \Exception('Invalid table name for saving order item');
         }
 
-        $sql = 'INSERT INTO '.$tablename.' (order_id,item_description,serial_number,estimate,cost,comments) 
-          VALUES(:orderId,:itemDescription,:serialNumber,:estimate,:cost,:comments)';
+        $sql = 'INSERT INTO '.$tablename.' (order_id,item_description,serial_number,estimate,cost,comments,item_status) 
+          VALUES(:orderId,:itemDescription,:serialNumber,:estimate,:cost,:comments,:item_status)';
 
         $query = $pdoConnection->prepare($sql);
 
@@ -33,7 +34,8 @@ class Item
             ':serialNumber'=>$this->serialNumber,
             ':estimate'=>$this->estimate,
             ':cost'=>$this->cost,
-            ':comments'=>$this->comments
+            ':comments'=>$this->comments,
+            ':item_status'=>$this->itemStatus
         ));
 
         if ($success == false){
@@ -55,6 +57,7 @@ class Item
             estimate = :estimate,
             cost = :cost,
             comments = :comments
+            item_status = :item_status
             WHERE item_id = :itemId
         ';
 
@@ -67,7 +70,8 @@ class Item
             ':estimate'=>$this->estimate,
             ':cost'=>$this->cost,
             ':comments'=>$this->comments,
-            ':itemId'=>$this->itemId
+            ':itemId'=>$this->itemId,
+            ':item_status'=>$this->itemStatus
         ));
 
         if (!$success){throw new \Exception('unable to update mysql database for this item');}
@@ -95,6 +99,7 @@ class Item
         $this->estimate = $dbRecord->estimate;
         $this->cost = $dbRecord->cost;
         $this->comments = $dbRecord->comments;
+        $this->itemStatus = $dbRecord->item_status;
 
         return;
     }
@@ -108,6 +113,7 @@ class Item
   `cost` decimal(6,2) DEFAULT NULL,
   `estimate` decimal(6,2) DEFAULT NULL,
   `comments` text,
+  `item_status` varchar(128),
   PRIMARY KEY (`item_id`)
 ) DEFAULT CHARSET=utf8;';
 
