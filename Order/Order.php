@@ -37,7 +37,7 @@ class Order
     public function validate_fields(){
 
         if (
-                !is_a($this->orderdate, 'DateTime')
+            !is_a($this->orderdate, 'DateTime')
             || (!is_string($this->orderstatus) && !is_null($this->orderstatus))
             || !is_string($this->firstname)
             || !is_string($this->lastname)
@@ -202,7 +202,8 @@ class Order
     }
 
     public function load_itemList($pdoConnection,$tableName='items'){
-        
+
+
         $sql = 'SELECT * FROM '.$tableName.' WHERE order_id = :orderId';
 
         $query = $pdoConnection->prepare($sql);
@@ -211,15 +212,18 @@ class Order
 
         if (! $success){ throw new \Exception('unable to find any orders for that id number');}
 
-        $resultList = $query->fetchAll();
+        $resultList = $query->fetchAll(\PDO::FETCH_OBJ);
+
 
         foreach ($resultList as $result){
 
             $item = new Item();
-            if ($item->classify_object($result)){
-                $this->itemList[$item->itemId] = $item;
-            }
+            $item->classify_object($result);
+
+            $this->itemList[$result->item_id] = $item;
+
         }
+
 
     }
 

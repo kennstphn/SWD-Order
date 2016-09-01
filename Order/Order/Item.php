@@ -88,16 +88,15 @@ class Item
     }
 
     public function classify_object($dbRecord){
-        $this->itemId = $dbRecord->itemId;
-        $this->orderId = $dbRecord->orderId;
-        $this->itemDescription = $dbRecord->itemDescription;
-        $this->serialNumber = $dbRecord->serialNumber;
+        $this->itemId = $dbRecord->item_id;
+        $this->orderId = $dbRecord->order_id;
+        $this->itemDescription = $dbRecord->item_description;
+        $this->serialNumber = $dbRecord->serial_number;
         $this->estimate = $dbRecord->estimate;
         $this->cost = $dbRecord->cost;
         $this->comments = $dbRecord->comments;
 
-        if ($this->validate_info()){ return true;}
-        return false;
+        return;
     }
 
     public static function create_mysql_storage_table($pdoConnection, $tablename = 'items'){
