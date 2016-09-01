@@ -35,7 +35,7 @@ class Item
             ':estimate'=>$this->estimate,
             ':cost'=>$this->cost,
             ':comments'=>$this->comments,
-            ':item_status'=>$this->itemStatus
+            ':item_status'=>($this->itemStatus?$this->itemStatus:'pending')
         ));
 
         if ($success == false){
@@ -81,12 +81,6 @@ class Item
 
     private function validate_info(){
 
-        if(
-            !is_string($this->comments)
-            || !is_string($this->serialNumber)
-        ){
-            return false;
-        }
 
         return true;
     }
