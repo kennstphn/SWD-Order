@@ -27,6 +27,10 @@ class Order
     public $state;
     public $zip;
     public $country;
+    
+    //access token
+    // THIS IS A HASHED PASSWORD
+    public $token;
 
     //Children Objects
     public $itemList= array(
@@ -75,7 +79,8 @@ class Order
                     city = :city,
                     state = :state,
                     zip = :zip,
-                    country = :country
+                    country = :country,
+                    access_token = :access_token
                 WHERE order_id = :order_id';
         $query = $pdoConnection->prepare($sql);
         $success = $query->execute(array(
@@ -92,7 +97,8 @@ class Order
             ':state'=>$this->state,
             ':zip'=>$this->zip,
             ':country'=>$this->country,
-            ':order_id'=>$this->order_id
+            ':order_id'=>$this->order_id,
+            ":access_token"=>$this->access_token
 
         ));
 
@@ -100,6 +106,18 @@ class Order
     }
 
     public function add_to_mysql_storageTable($pdoConnection, $tablename='orders'){
+        if (! $this->token){
+            $password = rand(111111,999999);
+            switch(function_exists('password_hash')){
+                case true:
+                    $this->token = password_hash($password, PASSWORD_DEFAULT);
+                    break;
+                default:
+                    $this->token = hash('sha512',$password);
+                    break;
+            }
+        }
+        $this->password = $password;
 
         if(strpos($tablename,' ') !== false){throw new \Exception('Invalid table name to save Order');}
 
@@ -108,9 +126,9 @@ class Order
 
 
         $sql = 'INSERT INTO '.$tablename.' 
-                (order_date,order_status,company,firstname,lastname,phone,email,address1,address2,city,state,zip,country) 
+                (order_date,order_status,company,firstname,lastname,phone,email,address1,address2,city,state,zip,country,access_token) 
                 VALUES 
-                (:orderdate,:orderstatus,:company,:firstname,:lastname,:phone,:email,:address1,:address2,:city,:state,:zip,:country)';
+                (:orderdate,:orderstatus,:company,:firstname,:lastname,:phone,:email,:address1,:address2,:city,:state,:zip,:country,:access_token)';
 
         $query = $pdoConnection->prepare($sql);
         $success = $query->execute(array(
@@ -126,7 +144,8 @@ class Order
             ':city'=>$this->city,
             ':state'=>$this->state,
             ':zip'=> $this->zip,
-            ':country'=>$this->country
+            ':country'=>$this->country,
+            ':access_token'=>$this->token
         ));
 
         if (!$success ){ throw new \Exception('Unable to store order details');}
@@ -162,6 +181,7 @@ class Order
         $this->orderstatus = $result['order_status'];
         $this->orderdate = $result['order_date'];
         $this->order_id = $result['order_id'];
+        $this->token = $result['access_token'];
 
         if (! is_a($this->orderdate, 'DateTime')){
             $this->orderdate = new \DateTime($this->orderdate);
@@ -193,6 +213,7 @@ class Order
           `state` varchar(64) NULL DEFAULT NULL,
           `zip` varchar(64) NOT NULL,
           `country` varchar(64) NOT NULL,
+          `access_token` varchar(256) NULL,
           PRIMARY KEY (`order_id`)
           ) DEFAULT CHARSET=utf8;';
 
